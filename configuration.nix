@@ -8,6 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./webserver.nix
+	  ./docker-container-email.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -44,16 +46,6 @@
     keyMap = "us";
   };
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-
-  
-
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
@@ -74,19 +66,28 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # the defaults
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    vim
     wget
     firefox
     curl
 
     # Webserver stuff
     nginx
+    tmux
 
     # misc applications
     htop
     git
     rxvt_unicode.terminfo
+
+    # Containers
+    docker
+    docker-compose
   ];
+  
+  # enable docker containers
+  virtualisation.docker.enable = true;
+  virtualisation.oci-containers.backend = "docker";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
